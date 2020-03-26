@@ -4,11 +4,13 @@ const app = express()
 const cors = require('cors')
 
 const rotaPessoa = require('./modules/pessoa/pessoa.router')
+const rotaCidade = require('./modules/cidade/cidade.router')
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use('/api', rotaPessoa)
+app.use('/api', rotaCidade)
 
 app.use((req, res, next) => {
     const erro = new Error('Rota não encontrada')
