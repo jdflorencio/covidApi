@@ -12,10 +12,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       nome: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(60)
       },
       uf: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(2)
       },
       createdAt: {
         allowNull: false,

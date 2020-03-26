@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       nome: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(60)
       },
       data_nascimento: {
         type: Sequelize.DATEONLY

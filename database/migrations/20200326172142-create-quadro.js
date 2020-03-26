@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       uf: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING(2)
       },
       caso_suspeito: {
         type: Sequelize.INTEGER
