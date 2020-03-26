@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('prontuarios', {
+    return queryInterface.createTable('prontuario', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -31,6 +31,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('prontuarios');
+    return queryInterface.dropTable('prontuario');
   }
 };
