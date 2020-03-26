@@ -12,7 +12,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       pessoa_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'cidade',
+          key: 'id'
+        }
       },
       situacao: {
         type: Sequelize.INTEGER
