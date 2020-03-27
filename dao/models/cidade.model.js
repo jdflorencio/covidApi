@@ -30,4 +30,7 @@ Cidade.hasMany(Pessoa, {
   onUpdate: "NO ACTION"
 })
 
+Pessoa.belongsTo(Cidade, {
+  foreignKey: "cidade_id"
+})
 module.exports = Cidade

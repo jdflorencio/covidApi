@@ -1,10 +1,9 @@
 'use strict';
 const { Sequelize, connection } = require('../connection')
 
-class Prontuario extends Sequelize.Model {}
-
+class Prontuario extends Sequelize.Model { }
 Prontuario.init({
-  id:  {
+  id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true
@@ -12,16 +11,17 @@ Prontuario.init({
   pessoa_id: Sequelize.INTEGER,
   situacao: Sequelize.INTEGER,
   data_hora: Sequelize.DATE
-}, {
-  sequelize: connection,
-  tableName: 'prontuario',
-  freezeTableName: true,
-  timestamps: true,
-  name: {
-    singular: 'prontuario',
-    plural: 'prontuario'
   },
-  underscored: false
+  {
+    sequelize: connection,
+    tableName: 'prontuario',
+    freezeTableName: true,
+    timestamps: true,
+    name: {
+      singular: 'prontuario',
+      plural: 'prontuario'
+    },
+    underscored: false
 })
 
 

@@ -34,4 +34,6 @@ Pessoa.hasMany(Prontuario, {
   onUpdate: "NO ACTION"
 })
 
+
+
 module.exports = Pessoa

@@ -2,18 +2,40 @@
 const { Sequelize, connection } = require('../../dao/connection')
 const { Op } = Sequelize
 const pessoaModel = require('../../dao/models/pessoa.model')
+const prontuarioModel = require('../../dao/models/prontuario.model')
+const cidadeModel = require('../../dao/models/cidade.model')
+
 // const helper = require('../pessoa/pessoa.helper')
 // const Promise = require('bluebird');
 
 class PessoaService {
 
 	async findAll() {
-		return await pessoaModel.findAll()
+		return await pessoaModel.findAll({
+			include: [
+				{
+					model: cidadeModel,
+					attributes: ['nome', 'uf']
+				}
+			],
+		})
 	}
 
 	async findById(pessoaId) {
-        return await pessoaModel.findByPk(pessoaId)
-    }
+		return await pessoaModel.findByPk(pessoaId, {
+			include: [
+				{
+					model: cidadeModel,
+					attributes: {
+						exclude: ['createdat', 'updatedAt']
+					}
+				},
+				{
+					model: prontuarioModel
+				}
+			]
+		})
+	}
 
 	async findData(data) {
 		return `retorno consultar lista de pessoas com sucesso! ${data}`
@@ -54,11 +76,11 @@ class PessoaService {
 		// const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
 		try {
-            return `Atualida a pessoa ${payload}`
-	
+			return `Atualida a pessoa ${payload}`
+
 
 		} catch (error) {
-			
+
 			return { status: 400, error }
 		}
 	}
