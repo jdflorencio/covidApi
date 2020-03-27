@@ -1,7 +1,7 @@
 'use strict';
 const { Sequelize, connection } = require('../connection')
 
-class Prontuario extends Sequelize.Model { }
+class Prontuario extends Sequelize.Model {}
 
 Prontuario.init({
   id: DataTypes.INTEGER,
