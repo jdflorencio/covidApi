@@ -4,10 +4,10 @@ const { Sequelize, connection } = require('../connection')
 class Quadro extends Sequelize.Model { }
 
 Quadro.init({
-    uf: DataTypes.STRING,
-    caso_suspeito: DataTypes.INTEGER,
-    caso_confirmado: DataTypes.INTEGER,
-    caso_descartado: DataTypes.INTEGER
+    uf: Sequelize.STRING,
+    caso_suspeito: Sequelize.INTEGER,
+    caso_confirmado: Sequelize.INTEGER,
+    caso_descartado: Sequelize.INTEGER
 }, {
 
     sequelize: connection,
@@ -21,4 +21,4 @@ Quadro.init({
     underscored: false
 })
 
-modules.exports = Quadro
+module.exports = Quadro
