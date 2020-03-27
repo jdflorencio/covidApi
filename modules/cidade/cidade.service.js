@@ -8,11 +8,10 @@ class CidadeService {
 
 	async findAll() {
 		return cidadeModel.findAll()
-		return `retorno de todas as cidades`
 	}
 
 	async findById(cidadeId) {
-        return `consulta de cidade ok! ${cidadeId} `	
+        return cidadeModel.findByPk(cidadeId)
     }
 
 	async findData(data) {

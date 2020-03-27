@@ -28,6 +28,7 @@ class CidadeController {
 
 	async findOne(req, res) {
 		try {
+			
 			const result = await this.service.findById(+req.params.id);
 			new Response(res).success(result)
 
