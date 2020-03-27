@@ -7,11 +7,11 @@ const helper = require('../cidade/cidade.helper')
 class CidadeService {
 
 	async findAll() {
-		return cidadeModel.findAll()
+		return await cidadeModel.findAll()
 	}
 
 	async findById(cidadeId) {
-        return cidadeModel.findByPk(cidadeId)
+        return await cidadeModel.findByPk(cidadeId)
     }
 
 	async findData(data) {

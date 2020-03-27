@@ -1,21 +1,18 @@
-//Validando as requisições de put e postconst { Sequelize, connection } = require('../../dao/connection')
-// const { Op } = Sequelize
-// const pessoaModel = require('../../dao/models/pessoa.model')
-// const enderecoModel = require('../../dao/models/endereco.model')
-// const telefoneModel = require('../../dao/models/telefone.model')
+
+const { Sequelize, connection } = require('../../dao/connection')
+const { Op } = Sequelize
+const pessoaModel = require('../../dao/models/pessoa.model')
 // const helper = require('../pessoa/pessoa.helper')
-
-
 // const Promise = require('bluebird');
 
 class PessoaService {
 
 	async findAll() {
-		return `retorno de todas as pessoas`
+		return await pessoaModel.findAll()
 	}
 
 	async findById(pessoaId) {
-        return `consulta de pessoa ok! ${pessoaId} `	
+        return await pessoaModel.findByPk(pessoaId)
     }
 
 	async findData(data) {

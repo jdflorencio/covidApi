@@ -15,7 +15,7 @@ Pessoa.init({
   cidade_id: Sequelize.INTEGER,
   situacao: Sequelize.INTEGER,
   createdAt: Sequelize.DATE,
-  updated: Sequelize.DATE
+  updatedAt: Sequelize.DATE
 }, {
   sequelize: connection,
   tableName: 'pessoa',
