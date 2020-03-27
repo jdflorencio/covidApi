@@ -4,10 +4,10 @@ const { Sequelize, connection } = require('../connection')
 class Prontuario extends Sequelize.Model {}
 
 Prontuario.init({
-  id: DataTypes.INTEGER,
-  pessoa_id: DataTypes.INTEGER,
-  situacao: DataTypes.INTEGER,
-  data_hora: DataTypes.DATE
+  id: Sequelize.INTEGER,
+  pessoa_id: Sequelize.INTEGER,
+  situacao: Sequelize.INTEGER,
+  data_hora: Sequelize.DATE
 }, {
   sequelize: connection,
   tableName: 'pronturario',

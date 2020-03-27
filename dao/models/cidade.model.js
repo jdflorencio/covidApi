@@ -5,9 +5,9 @@ const Pessoa = require('./pessoa.model')
 
 class Cidade extends Sequelize.Model { }
 Cidade.init({
-  id: DataTypes.INTEGER,
-  nome: DataTypes.STRING,
-  uf: DataTypes.STRING
+  id: Sequelize.INTEGER,
+  nome: Sequelize.STRING,
+  uf: Sequelize.STRING
 }, {
   sequelize: connection,
   tableName: 'cidade',

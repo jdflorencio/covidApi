@@ -4,11 +4,11 @@ const Prontuario = require('./prontuario.model')
 
 class Pessoa extends Sequelize.Model { }
 Pessoa.init({
-  id: DataTypes.INTEGER,
-  nome: DataTypes.STRING,
-  data_nascimento: DataTypes.DATEONLY,
-  cidade_id: DataTypes.INTEGER,
-  situacao: DataTypes.INTEGER
+  id: Sequelize.INTEGER,
+  nome: Sequelize.STRING,
+  data_nascimento: Sequelize.DATEONLY,
+  cidade_id: Sequelize.INTEGER,
+  situacao: Sequelize.INTEGER
 }, {
   sequelize: connection,
   tableName: 'pessoa',
