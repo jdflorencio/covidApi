@@ -5,7 +5,11 @@ const Pessoa = require('./pessoa.model')
 
 class Cidade extends Sequelize.Model { }
 Cidade.init({
-  id: Sequelize.INTEGER,
+  id:  {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   nome: Sequelize.STRING,
   uf: Sequelize.STRING
 }, {

@@ -4,21 +4,26 @@ const { Sequelize, connection } = require('../connection')
 class Prontuario extends Sequelize.Model {}
 
 Prontuario.init({
-  id: Sequelize.INTEGER,
+  id:  {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
   pessoa_id: Sequelize.INTEGER,
   situacao: Sequelize.INTEGER,
   data_hora: Sequelize.DATE
 }, {
   sequelize: connection,
-  tableName: 'pronturario',
+  tableName: 'prontuario',
   freezeTableName: true,
   timestamps: true,
   name: {
-    singular: 'cidade',
-    plural: 'cidade'
+    singular: 'prontuario',
+    plural: 'prontuario'
   },
   underscored: false
 })
+
 
 module.exports = Prontuario
 
