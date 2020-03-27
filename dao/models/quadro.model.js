@@ -19,7 +19,6 @@ Quadro.init({
         plural: "quadro"
     },
     underscored: false
-
 })
 
 modules.exports = Quadro
