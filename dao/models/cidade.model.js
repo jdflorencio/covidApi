@@ -1,6 +1,7 @@
 'use strict';
 
 const { Sequelize, connection } = require('../connection')
+const Pessoa = require('./pessoa.model')
 
 class Cidade extends Sequelize.Model { }
 Cidade.init({
@@ -14,7 +15,15 @@ Cidade.init({
   timestamps: true,
   name: {
     singular: 'cidade',
-    plural: 'pessoas'
+    plural: 'cidade'
   },
   underscored: false
 })
+
+Cidade.hasMany(Pessoa, {
+  foreignKey: "cidade_id",
+  onDelete: 'NO ACTION',
+  onUpdate: "NO ACTION"
+})
+
+module.exports = Cidade
