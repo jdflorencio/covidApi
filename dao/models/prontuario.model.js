@@ -16,7 +16,7 @@ Prontuario.init({
     sequelize: connection,
     tableName: 'prontuario',
     freezeTableName: true,
-    timestamps: true,
+    timestamps: false,
     name: {
       singular: 'prontuario',
       plural: 'prontuario'

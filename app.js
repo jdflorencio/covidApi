@@ -8,7 +8,9 @@ const rotaCidade = require('./modules/cidade/cidade.router')
 const rotaQuadro = require('./modules/quadro/quadro.router')
 
 app.use(cors())
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+
 
 app.use('/api', rotaPessoa)
 app.use('/api', rotaCidade)

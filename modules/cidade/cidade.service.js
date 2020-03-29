@@ -15,7 +15,24 @@ class CidadeService {
     }
 
 	async findData(data) {
-		return `retorno consultar lista de cidades com sucesso! ${data}`
+
+		return await cidadeModel.findAll({
+			where: {
+				[Op.or]:[
+					{
+						nome: {
+							[Op.substring]: data
+						}
+					},
+					{
+						id: data
+					},
+					{
+						uf: data
+					}
+				]
+			}
+		})
 	}
 
 	async save(payload) {
@@ -32,33 +49,31 @@ class CidadeService {
 
 	async update(payload) {
 
-		// let validPayload = helper.isValidUpdate(payload)
+		let validPayload = helper.isValidUpdate(payload)
 
-		// if (validPayload.error) {
-		// 	return Promise.reject({
-		// 		message: "Dados de entrada inválidos, verifique os campos obrigatorios",
-		// 		error: validPayload.error.msg
-		// 	});
-		// }
+		if (validPayload.error) {
+			return Promise.reject({
+				message: "Dados de entrada inválidos, verifique os campos obrigatorios",
+				error: validPayload.error.msg
+			});
+		}
 
-		// let cidade = await cidadeModel.findByPk(validPayload.value.id)
+		let cidade = await cidadeModel.findByPk(validPayload.value.id)
 
-		// if (!cidade) {
-		// 	return Promise.reject({
-		// 		message: "Cidade não encontrada.",
-		// 		error: ["Cidade não encontrada"]
-		// 	})
-		// }
+		if (!cidade) {
+			return Promise.reject({
+				message: "Cidade não encontrada.",
+				error: ["Cidade não encontrada"]
+			})
+		}
 
-		// const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
+		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
 		try {
-            return `Atualida a cidade ${payload}`
-	
-
+			await cidadeModel.update(validPayload.value, { where: { id: cidade.id}}, {transaction})		
 		} catch (error) {
-			
-			return { status: 400, error }
+			transaction.rollback()
+			throw error
 		}
 	}
 

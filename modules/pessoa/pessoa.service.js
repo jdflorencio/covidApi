@@ -27,13 +27,16 @@ class PessoaService {
 				{
 					model: cidadeModel,
 					attributes: {
-						exclude: ['createdat', 'updatedAt']
+						exclude: ['createdAt', 'updatedAt']
 					}
 				},
 				{
 					model: prontuarioModel
 				}
-			]
+			],
+			attributes: {
+				exclude: ['createdAt', 'updatedAt']
+			}
 		})
 	}
 
