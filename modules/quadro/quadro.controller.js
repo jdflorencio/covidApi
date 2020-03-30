@@ -25,16 +25,7 @@ class QuadroController {
 			new Response(res).preConditionFailed()
 		}
 	}
-
-	async findOne(req, res) {
-		try {
-			const result = await this.service.findById(+req.params.id);
-			new Response(res).success(result)
-
-		} catch (error) {
-			new Response(res).preConditionFailed()
-		}
-	}
+	
 
 	async filter(req, res) {
 		try {
@@ -57,16 +48,7 @@ class QuadroController {
 		}
 	}
 
-	async delete(req, res) {
-		try {
-			const { id } = req.params
-			await this.service.deleting(id)
-			new Response(res).success(id, `Cliente codigo: ${id} removido Com sucesso!` )
 
-		} catch (error) {
-			new Response(res).preConditionFailed()
-		}
-	}
 }
 
 let quadro = new QuadroController();

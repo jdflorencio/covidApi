@@ -12,6 +12,10 @@ class QuadroService {
 			]
 		})
 	}
+
+	async save() {
+		
+	}
 }
 
 let quadro = new QuadroService();
