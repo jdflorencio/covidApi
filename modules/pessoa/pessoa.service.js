@@ -4,9 +4,8 @@ const { Op } = Sequelize
 const pessoaModel = require('../../dao/models/pessoa.model')
 const prontuarioModel = require('../../dao/models/prontuario.model')
 const cidadeModel = require('../../dao/models/cidade.model')
-
-// const helper = require('../pessoa/pessoa.helper')
-// const Promise = require('bluebird');
+const helper = require('../pessoa/pessoa.helper')
+const Promise = require('bluebird')
 
 class PessoaService {
 
@@ -45,46 +44,70 @@ class PessoaService {
 	}
 
 	async save(payload) {
-		// const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
+		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
 		try {
-			return `pessoa foi criada com sucesso`
-		} catch (error) {
+			let validPayload = helper.isValidCreate(payload)
 
-			// transaction.rollback()
+			if (validPayload.error) {
+				return Promise.reject({
+					message: "Dados de entrada inválidos, verifique os campos obrigatorios",
+					error: validPayload.error.msg
+				});
+			}
+
+			const pessoaBuild = pessoaModel.build(validPayload.value)
+			const pessoaSaved = await pessoaBuild.save({ transaction })
+			const { prontuario }  = payload
+			prontuario.pessoa_id = pessoaSaved.id
+
+			Promise.resolve(prontuarioModel.create(prontuario, { transaction }))
+				.then(() => {
+					transaction.commit()
+				})
+				.catch(error => {
+					transaction.rollback()
+					throw error
+				})
+			return pessoaSaved.id
+
+
+
+		} catch (error) {
+			transaction.rollback()
 			throw error
 		}
 	}
 
 	async update(payload) {
 
-		// let validPayload = helper.isValidUpdate(payload)
+		let validPayload = helper.isValidUpdate(payload)
 
-		// if (validPayload.error) {
-		// 	return Promise.reject({
-		// 		message: "Dados de entrada inválidos, verifique os campos obrigatorios",
-		// 		error: validPayload.error.msg
-		// 	});
-		// }
+		if (validPayload.error) {
+			return Promise.reject({
+				message: "Dados de entrada inválidos, verifique os campos obrigatorios",
+				error: validPayload.error.msg
+			});
+		}
 
-		// let pessoa = await pessoaModel.findByPk(validPayload.value.id)
+		let pessoa = await pessoaModel.findByPk(validPayload.value.id)
 
-		// if (!pessoa) {
-		// 	return Promise.reject({
-		// 		message: "Pessoa não encontrada.",
-		// 		error: ["Pessoa não encontrada"]
-		// 	})
-		// }
+		if (!pessoa) {
+			return Promise.reject({
+				message: "Pessoa não encontrada.",
+			})
+		}
 
-		// const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
-
+		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
+		
 		try {
-			return `Atualida a pessoa ${payload}`
-
+			const pessoaUpdated =  await pessoaModel.update(validPayload.value, { where: { id: pessoa.id } }, { transaction })
+			transaction.commit()
+			return pessoaUpdated
 
 		} catch (error) {
-
-			return { status: 400, error }
+			transaction.rollback()
+			throw error
 		}
 	}
 

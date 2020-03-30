@@ -12,17 +12,18 @@ class PessoaController {
 			new Response(res).success(result)
 
 		} catch (error) {
-			new Response(res).preConditionFailed()
+			new Response(res).preConditionFailed(error)
 		}
 	}
-
+	
 	async update(req, res) {
 		try {
 			const result = await this.service.update(req.body);
 			new Response(res).success(result)
-
+			
 		} catch (error) {
-			new Response(res).preConditionFailed()
+			console.log(error)
+			new Response(res).preConditionFailed(error)
 		}
 	}
 
@@ -32,7 +33,7 @@ class PessoaController {
 			new Response(res).success(result)
 
 		} catch (error) {
-			new Response(res).preConditionFailed()
+			new Response(res).preConditionFailed(error)
 		}
 	}
 
@@ -43,7 +44,7 @@ class PessoaController {
 			new Response(res).success(result)
 
 		} catch (error) {
-			new Response(res).preConditionFailed()
+			new Response(res).preConditionFailed(error)
 		}
 	}
 
@@ -53,7 +54,7 @@ class PessoaController {
 			new Response(res).success(result)
 
 		} catch (error) {
-			new Response(res).preConditionFailed()
+			new Response(res).preConditionFailed(error)
 		}
 	}
 
@@ -64,7 +65,7 @@ class PessoaController {
 			new Response(res).success(id, `Cliente codigo: ${id} removido Com sucesso!` )
 
 		} catch (error) {
-			new Response(res).preConditionFailed()
+			new Response(res).preConditionFailed(error)
 		}
 	}
 }
