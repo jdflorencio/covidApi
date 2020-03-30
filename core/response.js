@@ -62,11 +62,8 @@ class Response {
     }
   
     preConditionFailed(mensagem) {
-      this.response.status(Response.HTTP_STATUS().PRE_CONDITION_FAILED).json({
-        mensagem: mensagem || 'Condição de entrada inválida',
-        dados: {},
-        erros: [],
-      });
+      mensagem = mensagem || {messagem: 'Condição de entrada inválida' }
+      this.response.status(Response.HTTP_STATUS().PRE_CONDITION_FAILED).json( mensagem );
     }
   }
   

@@ -2,7 +2,7 @@ const { Sequelize, connection } = require('../../dao/connection')
 const { Op } = Sequelize
 const cidadeModel = require('../../dao/models/cidade.model')
 const helper = require('../cidade/cidade.helper')
-// const Promise = require('bluebird');
+const Promise = require('bluebird');
 
 class CidadeService {
 

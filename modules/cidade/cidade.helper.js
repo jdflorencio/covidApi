@@ -2,7 +2,7 @@ const Joi = require('@hapi/joi')
 
 const cidadeSchema = {   
   
-    nome                : Joi.string().min(3).max(60).required(),
+    nome              : Joi.string().min(3).max(60).required(),
     uf                : Joi.string().min(2).max(2).required()
 }
 class CidadeHelper {
