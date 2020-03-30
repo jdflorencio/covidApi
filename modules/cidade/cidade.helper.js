@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi')
 
-const cidadeSchema = {   
+const cidadeSchema = {
   
     nome              : Joi.string().min(3).max(60).required(),
     uf                : Joi.string().min(2).max(2).required()
@@ -20,21 +20,18 @@ class CidadeHelper {
 
     isValidUpdate(payload) {
 
-      console.log(">>",payload)
-        this.schema.id = Joi.number().integer().required();
-
-        const schema = Joi.object().keys(this.schema);
-        const result = schema.validate(payload, {allowUnknown : true});
-        return this.resetJoiErrorMessage(result)           
+        this.schema.id = Joi.number().integer().required()
+         const schema = Joi.object().keys(this.schema)
+        const result = schema.validate(payload, {allowUnknown : true})
+        return this.resetJoiErrorMessage(result)
     }
 
     resetJoiErrorMessage(joiResult) {
-
       if (joiResult.error) {
         const erro = [];
         if (joiResult.error.details && joiResult.error.details.length > 0) {
           joiResult.error.details.map(function(e) {
-            console.log(e)
+            erro.push(e.path)           
             erro.push(e.message);
           });
           joiResult.error.msg = erro;
