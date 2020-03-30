@@ -83,6 +83,8 @@ class CidadeService {
 
 		try {
 			await cidadeModel.update(validPayload.value, { where: { id: cidade.id } }, { transaction })
+			transaction.commit()
+
 		} catch (error) {
 			transaction.rollback()
 			throw error
@@ -90,7 +92,7 @@ class CidadeService {
 	}
 
 	async deleting(cidadeId) {
-		return `cidade deletada ${cidadeId}`
+		return await cidadeModel.destroy({ where: { id: cidadeId}})
 	}
 }
 

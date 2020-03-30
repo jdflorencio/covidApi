@@ -61,8 +61,8 @@ class CidadeController {
 	async delete(req, res) {
 		try {
 			const { id } = req.params
-			await this.service.deleting(id)
-			new Response(res).success(id, `Cliente codigo: ${id} removido Com sucesso!` )
+			const result = await this.service.deleting(id)
+			new Response(res).success(result, ` ${result} Removido com sucesso!` )
 
 		} catch (error) {
 			new Response(res).preConditionFailed(error)
