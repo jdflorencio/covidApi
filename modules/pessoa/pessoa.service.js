@@ -58,7 +58,7 @@ class PessoaService {
 
 			const pessoaBuild = pessoaModel.build(validPayload.value)
 			const pessoaSaved = await pessoaBuild.save({ transaction })
-			const { prontuario }  = payload
+			const { prontuario } = payload
 			prontuario.pessoa_id = pessoaSaved.id
 
 			Promise.resolve(prontuarioModel.create(prontuario, { transaction }))
@@ -99,9 +99,9 @@ class PessoaService {
 		}
 
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
-		
+
 		try {
-			const pessoaUpdated =  await pessoaModel.update(validPayload.value, { where: { id: pessoa.id } }, { transaction })
+			const pessoaUpdated = await pessoaModel.update(validPayload.value, { where: { id: pessoa.id } }, { transaction })
 			transaction.commit()
 			return pessoaUpdated
 
@@ -113,6 +113,40 @@ class PessoaService {
 
 	async deleting(pessoaId) {
 		return `pessoa deletada ${pessoaId}`
+	}
+
+	async updateCidade() {
+
+	}
+
+	async findAllSituacoes() {
+		return [
+			{situacao:1, descricao: "Suspeito"},
+			{situacao:2, descricao: "Em Análise"},
+			{situacao:3, descricao: "Confirmado"},
+			{situacao:4, descricao: "Descartado"},
+
+		]
+	}
+
+	async situacaoUpdate(payload) {
+		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
+
+		let validPayload = helper.isValidSituacao(payload)
+
+		if (validPayload.error) {
+			return Promise.reject({
+				message: "Dados de entrada inválidos, verifique os campos obrigatorios",
+				error: validPayload.error.msg
+			});
+		}
+
+		try {
+			await prontuarioModel.create(validPayload.value, { transaction })
+
+		} catch (error) {
+			throw error
+		}
 	}
 }
 

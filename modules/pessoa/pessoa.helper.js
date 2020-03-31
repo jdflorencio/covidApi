@@ -34,6 +34,13 @@ class PessoaHelper {
         return this.resetJoiErrorMessage(result)           
     }
 
+    isValidUpdate(payload) {
+      this.schema.id = Joi.number().integer().required();
+      const schema = Joi.object().keys(this.schema);
+      const result = schema.validate(payload, {allowUnknown : true});
+      return this.resetJoiErrorMessage(result)           
+  }
+
     resetJoiErrorMessage(joiResult) {
 
       if (joiResult.error) {

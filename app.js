@@ -12,9 +12,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 
-app.use('/api', rotaPessoa)
-app.use('/api', rotaCidade)
-app.use('/api', rotaQuadro)
+app.use(rotaPessoa)
+app.use(rotaCidade)
+app.use(rotaQuadro)
 
 app.use((req, res, next) => {
     const erro = new Error('Rota não encontrada')

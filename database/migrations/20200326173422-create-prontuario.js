@@ -20,7 +20,9 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       data_hora: {
-        type: Sequelize.DATE
+        type: 'TIMESTAMP',
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        allowNull: false
       }
     });
   },

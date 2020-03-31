@@ -58,6 +58,26 @@ class PessoaController {
 		}
 	}
 
+	async situacaoAll(req, res) {
+		try {
+			const result = await this.service.findAllSituacoes()
+			new Response(res).success(result)
+
+		} catch (error) {
+			new Response(res).preConditionFailed(error)
+		}
+	}
+
+	async situacaoUpdate(req, res) {
+		try {
+			const result = await this.service.updateSituacao()
+			new Response(res).success(result)
+
+		} catch (error) {
+			new Response(res).preConditionFailed(error)
+		}
+	}
+
 	async delete(req, res) {
 		try {
 			const { id } = req.params

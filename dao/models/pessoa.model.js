@@ -28,7 +28,7 @@ Pessoa.init({
   underscored: false
 })
 
-Pessoa.hasOne(Prontuario, {
+Pessoa.hasMany(Prontuario, {
   foreignKey: "pessoa_id",
   onDelete: 'NO ACTION',
   onUpdate: "NO ACTION"
