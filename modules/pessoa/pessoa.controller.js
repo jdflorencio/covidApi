@@ -15,12 +15,12 @@ class PessoaController {
 			new Response(res).preConditionFailed(error)
 		}
 	}
-	
+
 	async update(req, res) {
 		try {
 			const result = await this.service.update(req.body);
 			new Response(res).success(result)
-			
+
 		} catch (error) {
 			console.log(error)
 			new Response(res).preConditionFailed(error)
@@ -58,6 +58,16 @@ class PessoaController {
 		}
 	}
 
+	async updateCidade(req, res) {
+		try {
+			const result = await this.service.updateCidade(req)
+			new Response(res).success(result)
+
+		} catch (error) {
+			new Response(res).preConditionFailed(error)
+		}
+	}
+
 	async situacaoAll(req, res) {
 		try {
 			const result = await this.service.findAllSituacoes()
@@ -70,7 +80,7 @@ class PessoaController {
 
 	async situacaoUpdate(req, res) {
 		try {
-			const result = await this.service.updateSituacao()
+			const result = await this.service.situacaoUpdate(req)
 			new Response(res).success(result)
 
 		} catch (error) {
@@ -82,7 +92,7 @@ class PessoaController {
 		try {
 			const { id } = req.params
 			await this.service.deleting(id)
-			new Response(res).success(id, `Cliente codigo: ${id} removido Com sucesso!` )
+			new Response(res).success(id, `Cliente codigo: ${id} removido Com sucesso!`)
 
 		} catch (error) {
 			new Response(res).preConditionFailed(error)

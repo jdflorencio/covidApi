@@ -117,22 +117,32 @@ class PessoaService {
 
 	async updateCidade() {
 
+		return "cidade atualizada com sucesso!"
+
 	}
 
 	async findAllSituacoes() {
 		return [
-			{situacao:1, descricao: "Suspeito"},
-			{situacao:2, descricao: "Em Análise"},
-			{situacao:3, descricao: "Confirmado"},
-			{situacao:4, descricao: "Descartado"},
+			{ situacao: 1, descricao: "Suspeito" },
+			{ situacao: 2, descricao: "Em Análise" },
+			{ situacao: 3, descricao: "Confirmado" },
+			{ situacao: 4, descricao: "Descartado" },
 
 		]
 	}
 
 	async situacaoUpdate(payload) {
+		console.log(payload.params)
+		const { params, body } = payload
+
+		const situacao = {
+			pessoa_id: params.id,
+			situacao: body.situacao
+		}
+		
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
-		let validPayload = helper.isValidSituacao(payload)
+		let validPayload = helper.isValidSituacao(situacao)
 
 		if (validPayload.error) {
 			return Promise.reject({
@@ -142,9 +152,12 @@ class PessoaService {
 		}
 
 		try {
-			await prontuarioModel.create(validPayload.value, { transaction })
+			const prontuario = await prontuarioModel.create(validPayload.value, { transaction })
+			transaction.commit()
+			return prontuario
 
 		} catch (error) {
+			transaction.rollback()
 			throw error
 		}
 	}
