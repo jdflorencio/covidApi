@@ -39,10 +39,6 @@ class PessoaService {
 		})
 	}
 
-	async findData(data) {
-		return `retorno consultar lista de pessoas com sucesso! ${data}`
-	}
-
 	async save(payload) {
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
@@ -70,8 +66,6 @@ class PessoaService {
 					throw error
 				})
 			return pessoaSaved.id
-
-
 
 		} catch (error) {
 			transaction.rollback()
@@ -112,7 +106,8 @@ class PessoaService {
 	}
 
 	async deleting(pessoaId) {
-		return `pessoa deletada ${pessoaId}`
+		return await pessoaModel.destroy({where: {id: pessoaId}})
+		
 	}
 
 	async updateCidade(payload) {
@@ -124,8 +119,8 @@ class PessoaService {
 			nova: body.cidade
 		}
 		try {
-			const pessoa = await pessoaModel.update({cidade_id: cidade.nova}, {where: {id: cidade.id}},{ transaction })
-			
+			const pessoa = await pessoaModel.update({ cidade_id: cidade.nova }, { where: { id: cidade.id } }, { transaction })
+
 			transaction.commit()
 			return pessoa
 

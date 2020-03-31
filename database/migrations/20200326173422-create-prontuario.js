@@ -11,6 +11,8 @@ module.exports = {
       pessoa_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: "CASCADE",
+        onUpdate: "NO ACTION",
         references: {
           model: 'pessoa',
           key: 'id'

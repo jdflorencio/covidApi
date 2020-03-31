@@ -21,7 +21,7 @@ Prontuario.init({
       singular: 'prontuario',
       plural: 'prontuario'
     },
-    underscored: false
+    underscored: true
 })
 
 

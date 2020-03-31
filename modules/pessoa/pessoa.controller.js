@@ -37,17 +37,6 @@ class PessoaController {
 		}
 	}
 
-	async filter(req, res) {
-		try {
-
-			const result = await this.service.findData(req.params.data);
-			new Response(res).success(result)
-
-		} catch (error) {
-			new Response(res).preConditionFailed(error)
-		}
-	}
-
 	async findAll(req, res) {
 		try {
 			const result = await this.service.findAll()
@@ -91,8 +80,8 @@ class PessoaController {
 	async delete(req, res) {
 		try {
 			const { id } = req.params
-			await this.service.deleting(id)
-			new Response(res).success(id, `Cliente codigo: ${id} removido Com sucesso!`)
+			const deletado = await this.service.deleting(id)
+			new Response(res).success(deletado, `${deletado} removido Com sucesso!`)
 
 		} catch (error) {
 			new Response(res).preConditionFailed(error)

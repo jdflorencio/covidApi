@@ -30,9 +30,10 @@ Pessoa.init({
 
 Pessoa.hasMany(Prontuario, {
   foreignKey: "pessoa_id",
-  onDelete: 'NO ACTION',
-  onUpdate: "NO ACTION"
-})
+  onDelete: 'CASCADE',
+  onUpdate: "NO ACTION",
+}
+)
 
 
 
