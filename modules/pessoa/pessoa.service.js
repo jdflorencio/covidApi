@@ -115,9 +115,24 @@ class PessoaService {
 		return `pessoa deletada ${pessoaId}`
 	}
 
-	async updateCidade() {
+	async updateCidade(payload) {
+		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
-		return "cidade atualizada com sucesso!"
+		const { params, body } = payload
+		const cidade = {
+			id: params.id,
+			nova: body.cidade
+		}
+		try {
+			const pessoa = await pessoaModel.update({cidade_id: cidade.nova}, {where: {id: cidade.id}},{ transaction })
+			
+			transaction.commit()
+			return pessoa
+
+		} catch (error) {
+			transaction.rollback()
+			throw error
+		}
 
 	}
 
@@ -132,14 +147,13 @@ class PessoaService {
 	}
 
 	async situacaoUpdate(payload) {
-		console.log(payload.params)
 		const { params, body } = payload
 
 		const situacao = {
 			pessoa_id: params.id,
 			situacao: body.situacao
 		}
-		
+
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
 		let validPayload = helper.isValidSituacao(situacao)
