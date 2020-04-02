@@ -6,6 +6,7 @@ class Quadro extends Sequelize.Model { }
 Quadro.init({
     uf: Sequelize.STRING,
     caso_suspeito: Sequelize.INTEGER,
+    caso_analise: Sequelize.INTEGER,
     caso_confirmado: Sequelize.INTEGER,
     caso_descartado: Sequelize.INTEGER
 }, {

@@ -14,6 +14,9 @@ module.exports = {
       caso_suspeito: {
         type: Sequelize.INTEGER
       },
+      caso_analise: {
+        type: Sequelize.INTEGER
+      },
       caso_confirmado: {
         type: Sequelize.INTEGER
       },
