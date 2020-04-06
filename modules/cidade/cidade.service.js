@@ -92,7 +92,16 @@ class CidadeService {
 	}
 
 	async deleting(cidadeId) {
-		return await cidadeModel.destroy({ where: { id: cidadeId}})
+		try {
+			return await cidadeModel.destroy({ where: { id: cidadeId } })
+		} catch (error) {
+			if(error.fields) {
+				 throw {mensagem: "Essa Cidade esta relacionanda a um cadastro de pessoa."}
+			}else {
+				throw error
+			}
+			
+		}
 	}
 }
 
