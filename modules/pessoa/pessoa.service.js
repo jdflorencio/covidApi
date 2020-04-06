@@ -21,7 +21,8 @@ class PessoaService {
 					limit: 1,
 					order: [
 						['id', 'DESC']
-					]
+					], 
+					attributes: ['situacao']
 				}
 			],
 		})

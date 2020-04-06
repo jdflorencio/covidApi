@@ -33,6 +33,12 @@ module.exports = {
         situacao: 1,
         data_hora: new Date()
       },
+      {
+        id: 6,
+        pessoa_id: 5,
+        situacao: 2,
+        data_hora: new Date()
+      },
     ])
   },
 
