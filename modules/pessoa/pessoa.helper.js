@@ -17,7 +17,7 @@ const pessoaSchema = {
   data_nascimento: Joi.date().iso(),
   cidade_id: Joi.number().integer().min(0).required(),
   situacao: Joi.number().integer().min(0).valid(1,2,3,4).required(),
-  prontuario: Joi.object().keys(prontuarioSchema).allow(null),
+  // prontuario: Joi.object().keys(prontuarioSchema).allow(null),
 }
 class PessoaHelper {
 

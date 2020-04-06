@@ -43,7 +43,7 @@ class CidadeService {
 			let validPayload = helper.isValidCreate(payload)
 			if (validPayload.error) {
 				return Promise.reject({
-					message: "Dados de entrada inválidos, verifique os campos obrigatorios",
+					mensagem: "Dados de entrada inválidos, verifique os campos obrigatorios",
 					error: validPayload.error.msg
 				});
 			}
@@ -66,7 +66,7 @@ class CidadeService {
 
 		if (validPayload.error) {
 			return Promise.reject({
-				message: "Dados de entrada inválidos, verifique os campos obrigatorios",
+				mensagem: "Dados de entrada inválidos, verifique os campos obrigatorios",
 				error: validPayload.error.msg
 			});
 		}
@@ -75,7 +75,7 @@ class CidadeService {
 
 		if (!cidade) {
 			return Promise.reject({
-				message: "Cidade não encontrada."
+				mensagem: "Cidade não encontrada."
 			})
 		}
 

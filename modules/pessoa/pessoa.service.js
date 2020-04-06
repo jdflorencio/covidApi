@@ -55,7 +55,7 @@ class PessoaService {
 
 			if (validPayload.error) {
 				return Promise.reject({
-					message: "Dados de entrada inválidos, verifique os campos obrigatorios",
+					mensagem: "Dados de entrada inválidos, verifique os campos obrigatorios",
 					error: validPayload.error.msg
 				});
 			}
@@ -87,7 +87,7 @@ class PessoaService {
 
 		if (validPayload.error) {
 			return Promise.reject({
-				message: "Dados de entrada inválidos, verifique os campos obrigatorios",
+				mensagem: "Dados de entrada inválidos, verifique os campos obrigatorios",
 				error: validPayload.error.msg
 			});
 		}
@@ -163,7 +163,7 @@ class PessoaService {
 
 		if (validPayload.error) {
 			return Promise.reject({
-				message: "Dados de entrada inválidos, verifique os campos obrigatorios",
+				mensagem: "Dados de entrada inválidos, verifique os campos obrigatorios",
 				error: validPayload.error.msg
 			});
 		}
