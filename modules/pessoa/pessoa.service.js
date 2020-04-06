@@ -15,6 +15,13 @@ class PessoaService {
 				{
 					model: cidadeModel,
 					attributes: ['nome', 'uf']
+				},
+				{
+					model: prontuarioModel,
+					limit: 1,
+					order: [
+						['id', 'DESC']
+					]
 				}
 			],
 		})
