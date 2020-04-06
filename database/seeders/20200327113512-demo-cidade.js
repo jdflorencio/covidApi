@@ -6,45 +6,33 @@ module.exports = {
       {
         id: 1,
         nome: "Teixeira De Freitas",
-        uf: "BA",
-        createdAt: new Date(), 
-        updatedAt: new Date()
+        uf: "BA"
       },
       {
         id: 2,
         nome: "Eunápolis",
-        uf: "BA",
-        createdAt: new Date(), 
-        updatedAt: new Date()
+        uf: "BA"
 
       },
       {
         id: 3,
         nome: "Porto Seguro",
-        uf: "BA",
-        createdAt: new Date(), 
-        updatedAt: new Date()
+        uf: "BA"
       },
       {
         id: 4,
         nome: "Mucuri",
-        uf: "BA",
-        createdAt: new Date(), 
-        updatedAt: new Date()
+        uf: "BA"
       },
       {
         id: 5,
         nome: "Alcobaça",
-        uf: "BA",
-        createdAt: new Date(), 
-        updatedAt: new Date()
+        uf: "BA"
       },
       {
         id: 6,
         nome: "Prado",
-        uf: "BA",
-        createdAt: new Date(), 
-        updatedAt: new Date()
+        uf: "BA"
       }
     ])
   },

@@ -15,54 +15,10 @@ class QuadroService {
 			]
 		})
 
-		const pessoa = await pessoaModel.findAll({
-
-			include: [
-				{
-					model: cidadeModel,
-
-				},
-			],
-			attributes: [
-				[Sequelize.fn('count', Sequelize.col('cidade_id')), 'count']
-			],
-
-			group: ['cidade_id']
-
-		})
-
-		// const prontuario = await prontuarioModel.findAll({
-		// 	attributes: [
-
-		// 		[Sequelize.fn('count', Sequelize.col('situacao')), 'situacaoTotal']
-		// 	], 
-		// 	include: [
-		// 		{ 
-		// 			model: pessoaModel
-
-		// 		}
-		// 	],
-		// 	group: ['pessoa_id']
-
-		// })
-
-
+		const cidade = await connection.query("select cidade_id, count(distinct case when situacao = 1 then pessoa.id end ) as suspeito, count(distinct case when situacao = 2 then pessoa.id end ) as analise, count(distinct case when situacao = '3' then pessoa.id end) as confirmado, count(distinct case when situacao = 4 then pessoa.id end ) as descartado, cidade.nome, cidade.uf  from pessoa inner join cidade on pessoa.cidade_id = cidade.id group by cidade_id")
 		return {
-			geral, pessoa
+			geral, cidade
 		}
-
-	}
-
-	async getQuadroCidade() {
-
-	}
-
-	async save() {
-
-
-
-
-
 	}
 }
 

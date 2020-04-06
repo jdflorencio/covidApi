@@ -16,7 +16,7 @@ Cidade.init({
   sequelize: connection,
   tableName: 'cidade',
   freezeTableName: true,
-  timestamps: true,
+  timestamps: false,
   name: {
     singular: 'cidade',
     plural: 'cidade'
