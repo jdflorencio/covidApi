@@ -14,13 +14,12 @@ Pessoa.init({
   data_nascimento: Sequelize.DATEONLY,
   cidade_id: Sequelize.INTEGER,
   situacao: Sequelize.INTEGER,
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE
+  
 }, {
   sequelize: connection,
   tableName: 'pessoa',
   freezeTableName: true,
-  timestamps: true,
+  timestamps: false,
   name: {
     singular: 'pessoa',
     plural: 'pessoa'

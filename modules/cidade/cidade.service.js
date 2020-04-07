@@ -2,6 +2,7 @@ const { Sequelize, connection } = require('../../dao/connection')
 const { Op } = Sequelize
 const cidadeModel = require('../../dao/models/cidade.model')
 const helper = require('../cidade/cidade.helper')
+const casos= require('../../core/novoCaso')
 const Promise = require('bluebird');
 
 class CidadeService {
@@ -83,7 +84,16 @@ class CidadeService {
 
 		try {
 			await cidadeModel.update(validPayload.value, { where: { id: cidade.id } }, { transaction })
-			transaction.commit()
+			
+			Promise.resolve(casos.cidade(cidade.id, cidade.uf, validPayload.value.uf)).then(() => {
+				transaction.commit()
+			})
+			.catch( error => {
+				transaction.rollback()
+				throw error
+			})
+
+			
 
 		} catch (error) {
 			transaction.rollback()

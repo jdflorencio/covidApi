@@ -6,6 +6,7 @@ const prontuarioModel = require('../../dao/models/prontuario.model')
 const cidadeModel = require('../../dao/models/cidade.model')
 const helper = require('../pessoa/pessoa.helper')
 const Promise = require('bluebird')
+const casos = require('../../core/novoCaso')
 
 class PessoaService {
 
@@ -48,6 +49,7 @@ class PessoaService {
 	}
 
 	async save(payload) {
+		payload.situacao = 1
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
 		try {
@@ -65,13 +67,16 @@ class PessoaService {
 			const { prontuario } = payload
 			prontuario.pessoa_id = pessoaSaved.id
 
-			Promise.resolve(prontuarioModel.create(prontuario, { transaction }))
+	
+			Promise.resolve(prontuarioModel.create(prontuario, { transaction }), 
+			casos.novos(validPayload.value.cidade_id))
 				.then(() => {
 					transaction.commit()
 				})
 				.catch(error => {
 					transaction.rollback()
 					throw error
+
 				})
 			return pessoaSaved.id
 
