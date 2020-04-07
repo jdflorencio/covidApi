@@ -32,7 +32,7 @@ class QuadroService {
 			const quadrado = await quadroBuild.save({ transaction })
 
 			transaction.commit()
-			return quadro
+			return quadrado
 
 		} catch (error) {
 			transaction.rollback()
@@ -42,7 +42,7 @@ class QuadroService {
 	}
 
 	async update(payload) {
-		console.log(payload)
+
 
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 		try{
@@ -53,9 +53,7 @@ class QuadroService {
 
 			transaction.commit()
 
-			
 			return quadro
-
 
 		} catch(error) {
 			transaction.rollback()

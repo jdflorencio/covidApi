@@ -1,5 +1,5 @@
 const { Sequelize } = require('../dao/connection')
-const  QuadroService = require( '../modules/quadro/quadro.service')
+const QuadroService = require('../modules/quadro/quadro.service')
 const cidadeModel = require('../dao/models/cidade.model')
 const pessoaModel = require('../dao/models/pessoa.model')
 class Casos {
@@ -15,7 +15,7 @@ class Casos {
         }
 
         if (quadroUf) {
-            
+
             state.caso_suspeito = quadroUf.caso_suspeito + 1
             return await QuadroService.update(state)
         }
@@ -29,16 +29,15 @@ class Casos {
 
     async cidade(cidade_id, ufAnterior, ufAtual) {
 
-        const quadroUf = await QuadroService.consultar(ufAnterior)
+        const quadro_uf_anterior = await QuadroService.consultar(ufAnterior)
+        const quadro_uf_atual = await QuadroService.consultar(ufAtual)
 
-        if (!quadroUf) {
-            return true
-        }
+     
 
-        const pessoa =  await pessoaModel.findAll({
+        const pessoa = await pessoaModel.findAll({
             where: {
                 cidade_id: cidade_id
-            }, 
+            },
             attributes: [
                 'situacao',
                 [Sequelize.fn('count', Sequelize.col('id')), 'total']
@@ -47,16 +46,25 @@ class Casos {
         })
 
         const payload = {
-            caso_suspeito: 0, 
+            uf: ufAtual,
+            caso_suspeito: 0,
             caso_analise: 0,
-            caso_confirmado: 0, 
+            caso_confirmado: 0,
             caso_descartado: 0
         }
-   
-        pessoa.forEach( status => {
 
-             switch(status.dataValues.situacao) {
-                 case 1:
+        const estadoAnterior = {
+            uf: ufAnterior,
+            caso_suspeito: quadro_uf_anterior.dataValues.caso_suspeito,
+            caso_analise: quadro_uf_anterior.dataValues.caso_analise,
+            caso_confirmado: quadro_uf_anterior.dataValues.caso_confirmado,
+            caso_descartado: quadro_uf_anterior.dataValues.caso_descartado,
+
+        }
+        pessoa.forEach(status => {
+
+            switch (status.dataValues.situacao) {
+                case 1:
                     payload.caso_suspeito = status.dataValues.total
                     break
                 case 2:
@@ -67,21 +75,23 @@ class Casos {
                     break
                 case 4:
                     payload.caso_descartado = status.dataValues.total
-                break        
+                    break
 
-             }
+            }
         })
 
-        quadroUf.caso_suspeito = 40
-        quadroUf.caso_suspeito -= payload.caso_suspeito
-        quadroUf.caso_analise -= payload.caso_analise
-        quadroUf.caso_confirmado -= payload.caso_confirmado
-        quadroUf.caso_descartado -= payload.caso_descartado
+        estadoAnterior.caso_suspeito -= payload.caso_suspeito
+        estadoAnterior.caso_analise -= payload.caso_analise
+        estadoAnterior.caso_confirmado -= payload.caso_confirmado
+        estadoAnterior.caso_descartado -= payload.caso_descartado
 
-        await QuadroService.update(quadroUf)
-
-        
-
+        await QuadroService.update(estadoAnterior)
+        if (!quadro_uf_atual) {
+            
+            await QuadroService.insert(payload)
+            return true
+        }
+            await QuadroService.update(payload)
     }
 
 }
