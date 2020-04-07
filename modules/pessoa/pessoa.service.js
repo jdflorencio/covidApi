@@ -105,7 +105,7 @@ class PessoaService {
 		try {
 			const pessoaUpdated = await pessoaModel.update(validPayload.value, { where: { id: pessoa.id } }, { transaction })
 			transaction.commit()
-			return pessoaUpdated
+			return pessoa
 
 		} catch (error) {
 			transaction.rollback()
