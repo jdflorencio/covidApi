@@ -9,19 +9,24 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       uf: {
-        type: Sequelize.STRING(2)
+        type: Sequelize.STRING(2),
+        defaultValue: 0
       },
       caso_suspeito: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       caso_analise: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       caso_confirmado: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       },
       caso_descartado: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
       }
     });
   },
