@@ -99,7 +99,6 @@ class Casos {
 
         await QuadroService.update(payload)
     }
-
 }
 
 const casos = new Casos
