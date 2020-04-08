@@ -32,7 +32,7 @@ class Casos {
         const quadro_uf_anterior = await QuadroService.consultar(ufAnterior)
         const quadro_uf_atual = await QuadroService.consultar(ufAtual)
 
-     
+
 
         const pessoa = await pessoaModel.findAll({
             where: {
@@ -87,11 +87,17 @@ class Casos {
 
         await QuadroService.update(estadoAnterior)
         if (!quadro_uf_atual) {
-            
+
             await QuadroService.insert(payload)
             return true
         }
-            await QuadroService.update(payload)
+        payload.caso_suspeito += quadro_uf_atual.caso_suspeito
+        payload.caso_analise += quadro_uf_atual.caso_analise
+        payload.caso_confirmado += quadro_uf_atual.caso_confirmado
+        payload.caso_descartado += quadro_uf_atual.caso_descartado
+
+
+        await QuadroService.update(payload)
     }
 
 }
