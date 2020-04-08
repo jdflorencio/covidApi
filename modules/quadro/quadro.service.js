@@ -26,9 +26,9 @@ class QuadroService {
 
 	async insert(payload) {
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
-		try {		
-		
-			const quadroBuild = quadroModel.build(payload)					
+		try {
+
+			const quadroBuild = quadroModel.build(payload)
 			const quadrado = await quadroBuild.save({ transaction })
 
 			transaction.commit()
@@ -45,17 +45,19 @@ class QuadroService {
 
 
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
-		try{
-			
+		try {
+
 			const quadro = await quadroModel.update(payload, {
-				where: {uf: payload.uf}
-			}, {transaction})
+				where: { uf: payload.uf }
+			}, { transaction })
 
 			transaction.commit()
-
 			return quadro
 
-		} catch(error) {
+		} catch (error) {
+
+			
+			
 			transaction.rollback()
 			throw error
 		}
@@ -63,8 +65,8 @@ class QuadroService {
 
 	async consultar(uf) {
 		return await quadroModel.findOne({
-			where : {uf}
-		 })
+			where: { uf }
+		})
 	}
 }
 

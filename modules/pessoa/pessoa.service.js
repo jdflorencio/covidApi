@@ -22,7 +22,7 @@ class PessoaService {
 					limit: 1,
 					order: [
 						['id', 'DESC']
-					], 
+					],
 					attributes: ['situacao']
 				}
 			],
@@ -49,7 +49,13 @@ class PessoaService {
 	}
 
 	async save(payload) {
+
 		payload.situacao = 1
+		payload.prontuario = {
+			situacao: 1,
+			data_hora: new Date()
+		}
+
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
 		try {
@@ -67,9 +73,8 @@ class PessoaService {
 			const { prontuario } = payload
 			prontuario.pessoa_id = pessoaSaved.id
 
-	
-			Promise.resolve(prontuarioModel.create(prontuario, { transaction }), 
-			casos.novos(validPayload.value.cidade_id))
+			Promise.resolve(prontuarioModel.create(prontuario, { transaction }),
+				casos.novos(validPayload.value.cidade_id))
 				.then(() => {
 					transaction.commit()
 				})
@@ -119,8 +124,8 @@ class PessoaService {
 	}
 
 	async deleting(pessoaId) {
-		return await pessoaModel.destroy({where: {id: pessoaId}})
-		
+		return await pessoaModel.destroy({ where: { id: pessoaId } })
+
 	}
 
 	async updateCidade(payload) {
@@ -141,30 +146,25 @@ class PessoaService {
 			transaction.rollback()
 			throw error
 		}
-
-	}
-
-	async findAllSituacoes() {
-		return [
-			{ situacao: 1, descricao: "Suspeito" },
-			{ situacao: 2, descricao: "Em Análise" },
-			{ situacao: 3, descricao: "Confirmado" },
-			{ situacao: 4, descricao: "Descartado" },
-
-		]
 	}
 
 	async situacaoUpdate(payload) {
 		const { params, body } = payload
 
-		const situacao = {
+		const prontuario_body = {
 			pessoa_id: params.id,
 			situacao: body.situacao
 		}
 
+		const situacao = {
+			situacao: body.situacao,
+
+		}
+
+
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
 
-		let validPayload = helper.isValidSituacao(situacao)
+		let validPayload = helper.isValidSituacao(prontuario_body)
 
 		if (validPayload.error) {
 			return Promise.reject({
@@ -175,10 +175,16 @@ class PessoaService {
 
 		try {
 			const prontuario = await prontuarioModel.create(validPayload.value, { transaction })
+			pessoaModel.update(situacao, { where: { id: prontuario_body.pessoa_id } }, { transaction })
+			casos.atualizar(body)
+
 			transaction.commit()
+
 			return prontuario
 
 		} catch (error) {
+
+			
 			transaction.rollback()
 			throw error
 		}

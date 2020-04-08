@@ -17,7 +17,8 @@ const pessoaSchema = {
   data_nascimento: Joi.date().iso(),
   cidade_id: Joi.number().integer().min(0).required(),
   situacao: Joi.number().integer().min(0).valid(1,2,3,4).required(),
-  // prontuario: Joi.object().keys(prontuarioSchema).allow(null),
+  prontuario: Joi.object().keys(prontuarioSchema).allow(null),
+
 }
 class PessoaHelper {
 
@@ -34,18 +35,14 @@ class PessoaHelper {
   }
 
   isValidUpdate(payload) {
+    delete this.schema.prontuario
+    
     this.schema.id = Joi.number().integer().required();
     const schema = Joi.object().keys(this.schema);
     const result = schema.validate(payload, { allowUnknown: true });
     return this.resetJoiErrorMessage(result)
   }
 
-  isValidUpdate(payload) {
-    this.schema.id = Joi.number().integer().required();
-    const schema = Joi.object().keys(this.schema);
-    const result = schema.validate(payload, { allowUnknown: true });
-    return this.resetJoiErrorMessage(result)
-  }
 
   isValidSituacao(payload) {
     const schema = Joi.object().keys(this.schemaSituacao);

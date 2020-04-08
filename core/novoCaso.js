@@ -23,16 +23,35 @@ class Casos {
         return await QuadroService.insert(state)
     }
 
-    async atualizar(teste) {
-        QuadroService.insertQuadro()
+    async atualizar(payload) {
+
+        const { situacao, anterior, uf } = payload
+
+        const quadro = await QuadroService.consultar(uf)
+
+        const table = {
+            1: "caso_suspeito",
+            2: "caso_analise",
+            3: "caso_confirmado",
+            4: "caso_descartado",
+        }
+        const atualizar = {}
+
+        console.log('teste')
+
+        atualizar.uf = uf
+        atualizar[table[situacao]] = quadro[table[situacao]] + 1
+        atualizar[table[anterior]] = quadro[table[anterior]] - 1   
+
+       await QuadroService.update(atualizar)
+
+        return true
     }
 
     async cidade(cidade_id, ufAnterior, ufAtual) {
 
         const quadro_uf_anterior = await QuadroService.consultar(ufAnterior)
         const quadro_uf_atual = await QuadroService.consultar(ufAtual)
-
-
 
         const pessoa = await pessoaModel.findAll({
             where: {
@@ -51,16 +70,9 @@ class Casos {
             caso_analise: 0,
             caso_confirmado: 0,
             caso_descartado: 0
-        }
-
-        const estadoAnterior = {
-            uf: ufAnterior,
-            caso_suspeito: quadro_uf_anterior.dataValues.caso_suspeito,
-            caso_analise: quadro_uf_anterior.dataValues.caso_analise,
-            caso_confirmado: quadro_uf_anterior.dataValues.caso_confirmado,
-            caso_descartado: quadro_uf_anterior.dataValues.caso_descartado,
 
         }
+
         pessoa.forEach(status => {
 
             switch (status.dataValues.situacao) {
@@ -80,21 +92,37 @@ class Casos {
             }
         })
 
+        if (!quadro_uf_atual & !quadro_uf_anterior) {
+            await QuadroService.insert(payload)
+            return true
+        }
+
+        const estadoAnterior = {
+            uf: ufAnterior,
+            caso_suspeito: quadro_uf_anterior.dataValues.caso_suspeito,
+            caso_analise: quadro_uf_anterior.dataValues.caso_analise,
+            caso_confirmado: quadro_uf_anterior.dataValues.caso_confirmado,
+            caso_descartado: quadro_uf_anterior.dataValues.caso_descartado,
+
+        }
+
+        if (!quadro_uf_atual) {
+
+            await QuadroService.insert(payload)
+            return true
+        }
         estadoAnterior.caso_suspeito -= payload.caso_suspeito
         estadoAnterior.caso_analise -= payload.caso_analise
         estadoAnterior.caso_confirmado -= payload.caso_confirmado
         estadoAnterior.caso_descartado -= payload.caso_descartado
 
         await QuadroService.update(estadoAnterior)
-        if (!quadro_uf_atual) {
+        const atualizado = await QuadroService.consultar(ufAtual)
 
-            await QuadroService.insert(payload)
-            return true
-        }
-        payload.caso_suspeito += quadro_uf_atual.caso_suspeito
-        payload.caso_analise += quadro_uf_atual.caso_analise
-        payload.caso_confirmado += quadro_uf_atual.caso_confirmado
-        payload.caso_descartado += quadro_uf_atual.caso_descartado
+        payload.caso_suspeito += atualizado.caso_suspeito
+        payload.caso_analise += atualizado.caso_analise
+        payload.caso_confirmado += atualizado.caso_confirmado
+        payload.caso_descartado += atualizado.caso_descartado
 
 
         await QuadroService.update(payload)

@@ -34,6 +34,8 @@ Pessoa.hasMany(Prontuario, {
 }
 )
 
-
+Prontuario.belongsTo(Pessoa, {
+  foreignKey: "id"
+})
 
 module.exports = Pessoa
