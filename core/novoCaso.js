@@ -91,16 +91,16 @@ class Casos {
         })
 
         quadro_uf_anterior.dataValues.caso_suspeito = Number.isInteger(quadro_uf_anterior.dataValues.caso_suspeito) ?
-          quadro_uf_anterior.dataValues.caso_suspeito - atualizar.caso_suspeito : 0
+            quadro_uf_anterior.dataValues.caso_suspeito - atualizar.caso_suspeito     : 0
 
         quadro_uf_anterior.dataValues.caso_analise = Number.isInteger(quadro_uf_anterior.dataValues.caso_analise) ?
-          quadro_uf_anterior.dataValues.caso_analise - atualizar.caso_analise : 0
+            quadro_uf_anterior.dataValues.caso_analise - atualizar.caso_analise       : 0
 
         quadro_uf_anterior.dataValues.caso_confirmado = Number.isInteger(quadro_uf_anterior.dataValues.caso_confirmado) ?
-          quadro_uf_anterior.dataValues.caso_confirmado - atualizar.caso_confirmado : 0
+            quadro_uf_anterior.dataValues.caso_confirmado - atualizar.caso_confirmado : 0
 
         quadro_uf_anterior.dataValues.caso_descartado = Number.isInteger(quadro_uf_anterior.dataValues.caso_descartado) ?
-          quadro_uf_anterior.dataValues.caso_descartado - atualizar.caso_descartado : 0
+            quadro_uf_anterior.dataValues.caso_descartado - atualizar.caso_descartado : 0
 
 
         await QuadroService.update(quadro_uf_anterior.dataValues)
@@ -109,23 +109,23 @@ class Casos {
             atualizar.uf = ufAtual
 
             await QuadroService.insert(atualizar)
-             return true
+            return true
         }
 
-        quadro_uf_atual.dataValues.caso_suspeito = Number.isInteger( quadro_uf_atual.dataValues.caso_suspeito ) ?
-          quadro_uf_atual.dataValues.caso_suspeito + atualizar.caso_suspeito : 0
+        quadro_uf_atual.dataValues.caso_suspeito = Number.isInteger(quadro_uf_atual.dataValues.caso_suspeito) ?
+            quadro_uf_atual.dataValues.caso_suspeito + atualizar.caso_suspeito       : 0
 
-        quadro_uf_atual.dataValues.caso_analise = Number.isInteger( quadro_uf_atual.dataValues.caso_analise ) ?
-          quadro_uf_atual.dataValues.caso_analise + atualizar.caso_analise : 0
+        quadro_uf_atual.dataValues.caso_analise = Number.isInteger(quadro_uf_atual.dataValues.caso_analise) ?
+            quadro_uf_atual.dataValues.caso_analise + atualizar.caso_analise         : 0
 
-        quadro_uf_atual.dataValues.caso_confirmado = Number.isInteger( quadro_uf_atual.dataValues.caso_confirmado ) ?
-          quadro_uf_atual.dataValues.caso_confirmado + atualizar.caso_confirmado : 0
+        quadro_uf_atual.dataValues.caso_confirmado = Number.isInteger(quadro_uf_atual.dataValues.caso_confirmado) ?
+            quadro_uf_atual.dataValues.caso_confirmado + atualizar.caso_confirmado   : 0
 
-        quadro_uf_atual.dataValues.caso_descartado = Number.isInteger( quadro_uf_atual.dataValues.caso_descartado ) ?
-          quadro_uf_atual.dataValues.caso_descartado + atualizar.caso_descartado : 0
+        quadro_uf_atual.dataValues.caso_descartado = Number.isInteger(quadro_uf_atual.dataValues.caso_descartado) ?
+            quadro_uf_atual.dataValues.caso_descartado + atualizar.caso_descartado    : 0
 
 
-        await QuadroService.update( quadro_uf_atual.dataValues)
+        await QuadroService.update(quadro_uf_atual.dataValues)
         return true
     }
 }
