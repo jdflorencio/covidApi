@@ -68,6 +68,7 @@ class QuadroService {
 			where: { uf }
 		})
 	}
+	
 }
 
 

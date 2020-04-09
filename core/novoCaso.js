@@ -3,6 +3,14 @@ const QuadroService = require('../modules/quadro/quadro.service')
 const cidadeModel = require('../dao/models/cidade.model')
 const pessoaModel = require('../dao/models/pessoa.model')
 class Casos {
+    constructor() {
+        this.table = {
+            1: "caso_suspeito",
+            2: "caso_analise",
+            3: "caso_confirmado",
+            4: "caso_descartado",
+        }
+    }
 
     async novos(cidadeId) {
         const cidade = await cidadeModel.findByPk(cidadeId)
@@ -29,22 +37,32 @@ class Casos {
 
         const quadro = await QuadroService.consultar(uf)
 
-        const table = {
-            1: "caso_suspeito",
-            2: "caso_analise",
-            3: "caso_confirmado",
-            4: "caso_descartado",
-        }
         const atualizar = {}
 
-        console.log('teste')
-
         atualizar.uf = uf
-        atualizar[table[situacao]] = quadro[table[situacao]] + 1
-        atualizar[table[anterior]] = quadro[table[anterior]] - 1   
+        atualizar[this.table[situacao]] = quadro[this.table[situacao]] + 1
+        atualizar[this.table[anterior]] = quadro[this.table[anterior]] - 1
 
-       await QuadroService.update(atualizar)
+        await QuadroService.update(atualizar)
 
+        return true
+    }
+
+    async delete(id) {
+        const pessoa = await pessoaModel.findByPk(id, {
+            include: [
+                {
+                    model: cidadeModel
+                }
+            ]
+        })
+
+        const quadro = await QuadroService.consultar(pessoa.cidade.uf)
+        const atualizar = {}
+
+        atualizar.uf = pessoa.cidade.uf
+        atualizar[this.table[pessoa.situacao]] = quadro[this.table[quadro.situacao]] - 1
+        await QuadroService.update(atualizar)
         return true
     }
 
@@ -64,68 +82,51 @@ class Casos {
             group: ['situacao']
         })
 
-        const payload = {
-            uf: ufAtual,
-            caso_suspeito: 0,
-            caso_analise: 0,
-            caso_confirmado: 0,
-            caso_descartado: 0
+        const atualizar = {}
 
-        }
 
-        pessoa.forEach(status => {
+        pessoa.map(status => {
+            atualizar[this.table[status.dataValues.situacao]] = status.dataValues.total
 
-            switch (status.dataValues.situacao) {
-                case 1:
-                    payload.caso_suspeito = status.dataValues.total
-                    break
-                case 2:
-                    payload.caso_analise = status.dataValues.total
-                    break
-                case 3:
-                    payload.caso_confirmado = status.dataValues.total
-                    break
-                case 4:
-                    payload.caso_descartado = status.dataValues.total
-                    break
-
-            }
         })
 
-        if (!quadro_uf_atual & !quadro_uf_anterior) {
-            await QuadroService.insert(payload)
-            return true
-        }
+        quadro_uf_anterior.dataValues.caso_suspeito = Number.isInteger(quadro_uf_anterior.dataValues.caso_suspeito) ?
+          quadro_uf_anterior.dataValues.caso_suspeito - atualizar.caso_suspeito : 0
 
-        const estadoAnterior = {
-            uf: ufAnterior,
-            caso_suspeito: quadro_uf_anterior.dataValues.caso_suspeito,
-            caso_analise: quadro_uf_anterior.dataValues.caso_analise,
-            caso_confirmado: quadro_uf_anterior.dataValues.caso_confirmado,
-            caso_descartado: quadro_uf_anterior.dataValues.caso_descartado,
+        quadro_uf_anterior.dataValues.caso_analise = Number.isInteger(quadro_uf_anterior.dataValues.caso_analise) ?
+          quadro_uf_anterior.dataValues.caso_analise - atualizar.caso_analise : 0
 
-        }
+        quadro_uf_anterior.dataValues.caso_confirmado = Number.isInteger(quadro_uf_anterior.dataValues.caso_confirmado) ?
+          quadro_uf_anterior.dataValues.caso_confirmado - atualizar.caso_confirmado : 0
+
+        quadro_uf_anterior.dataValues.caso_descartado = Number.isInteger(quadro_uf_anterior.dataValues.caso_descartado) ?
+          quadro_uf_anterior.dataValues.caso_descartado - atualizar.caso_descartado : 0
+
+
+        await QuadroService.update(quadro_uf_anterior.dataValues)
 
         if (!quadro_uf_atual) {
+            atualizar.uf = ufAtual
 
-            await QuadroService.insert(payload)
-            return true
+            await QuadroService.insert(atualizar)
+             return true
         }
-        estadoAnterior.caso_suspeito -= payload.caso_suspeito
-        estadoAnterior.caso_analise -= payload.caso_analise
-        estadoAnterior.caso_confirmado -= payload.caso_confirmado
-        estadoAnterior.caso_descartado -= payload.caso_descartado
 
-        await QuadroService.update(estadoAnterior)
-        const atualizado = await QuadroService.consultar(ufAtual)
+        quadro_uf_atual.dataValues.caso_suspeito = Number.isInteger( quadro_uf_atual.dataValues.caso_suspeito ) ?
+          quadro_uf_atual.dataValues.caso_suspeito + atualizar.caso_suspeito : 0
 
-        payload.caso_suspeito += atualizado.caso_suspeito
-        payload.caso_analise += atualizado.caso_analise
-        payload.caso_confirmado += atualizado.caso_confirmado
-        payload.caso_descartado += atualizado.caso_descartado
+        quadro_uf_atual.dataValues.caso_analise = Number.isInteger( quadro_uf_atual.dataValues.caso_analise ) ?
+          quadro_uf_atual.dataValues.caso_analise + atualizar.caso_analise : 0
+
+        quadro_uf_atual.dataValues.caso_confirmado = Number.isInteger( quadro_uf_atual.dataValues.caso_confirmado ) ?
+          quadro_uf_atual.dataValues.caso_confirmado + atualizar.caso_confirmado : 0
+
+        quadro_uf_atual.dataValues.caso_descartado = Number.isInteger( quadro_uf_atual.dataValues.caso_descartado ) ?
+          quadro_uf_atual.dataValues.caso_descartado + atualizar.caso_descartado : 0
 
 
-        await QuadroService.update(payload)
+        await QuadroService.update( quadro_uf_atual.dataValues)
+        return true
     }
 }
 

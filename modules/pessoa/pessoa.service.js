@@ -16,14 +16,6 @@ class PessoaService {
 				{
 					model: cidadeModel,
 					attributes: ['nome', 'uf']
-				},
-				{
-					model: prontuarioModel,
-					limit: 1,
-					order: [
-						['id', 'DESC']
-					],
-					attributes: ['situacao']
 				}
 			],
 		})
@@ -33,18 +25,12 @@ class PessoaService {
 		return await pessoaModel.findByPk(pessoaId, {
 			include: [
 				{
-					model: cidadeModel,
-					attributes: {
-						exclude: ['createdAt', 'updatedAt']
-					}
+					model: cidadeModel
 				},
 				{
 					model: prontuarioModel
 				}
-			],
-			attributes: {
-				exclude: ['createdAt', 'updatedAt']
-			}
+			]
 		})
 	}
 
@@ -124,6 +110,7 @@ class PessoaService {
 	}
 
 	async deleting(pessoaId) {
+		await casos.delete(pessoaId)
 		return await pessoaModel.destroy({ where: { id: pessoaId } })
 
 	}
@@ -184,7 +171,7 @@ class PessoaService {
 
 		} catch (error) {
 
-			
+
 			transaction.rollback()
 			throw error
 		}
