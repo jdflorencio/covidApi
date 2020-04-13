@@ -106,7 +106,7 @@ class CidadeService {
 			return await cidadeModel.destroy({ where: { id: cidadeId } })
 		} catch (error) {
 			if(error.fields) {
-				 throw {mensagem: "Essa Cidade esta relacionanda a um cadastro de pessoa."}
+				 throw {mensagem: "não é possível excluir esta cidade pois existem pessoas associadas à mesma."}
 			}else {
 				throw error
 			}

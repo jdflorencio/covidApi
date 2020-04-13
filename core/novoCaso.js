@@ -50,8 +50,12 @@ class Casos {
 
     async alterarCidade(payload) {
 
-
         const cidade_nova = await cidadeModel.findByPk(payload.nova)
+
+        if (cidade_nova.uf == payload.uf_anterior) {
+            return true
+        }
+
         const quadro = await QuadroService.quadroAll()
 
         let decrementar = {}
@@ -59,16 +63,16 @@ class Casos {
 
         quadro.map(row => {
             if (row.uf == cidade_nova.uf) {
-                atualizar = row.dataValues                    
-                
+                atualizar = row.dataValues
+
             } else if (row.uf == payload.uf_anterior) {
                 decrementar = row.dataValues
             }
 
         })
-        
+
         decrementar[this.table[payload.situacao]] -= 1
-        
+
         QuadroService.update(decrementar)
 
         if (!atualizar.uf) {
@@ -99,11 +103,11 @@ class Casos {
 
         const quadro = await QuadroService.consultar(pessoa.cidade.uf)
         const total = (quadro.caso_suspeito + quadro.caso_analise + quadro.caso_confirmado + quadro.caso_descartado) - 1
-        if (total <=0 ) {
+        if (total <= 0) {
             QuadroService.delete(pessoa.cidade.uf)
             return true
         }
-        
+
         const atualizar = {}
 
         atualizar.uf = pessoa.cidade.uf
@@ -111,8 +115,6 @@ class Casos {
         await QuadroService.update(atualizar)
         return true
     }
-
-
 
     async cidade(cidade_id, ufAnterior, ufAtual) {
 
@@ -132,10 +134,8 @@ class Casos {
 
         const atualizar = {}
 
-
         pessoa.map(status => {
             atualizar[this.table[status.dataValues.situacao]] = status.dataValues.total
-
         })
 
         quadro_uf_anterior.dataValues.caso_suspeito = Number.isInteger(quadro_uf_anterior.dataValues.caso_suspeito) ?
