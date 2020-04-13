@@ -15,6 +15,7 @@ const database = {
       dialect: process.env.DB_DIALECT,
       port: process.env.DB_PORT,
       logging: console.log,
+      timezone: "-03:00"
    
     })
   },

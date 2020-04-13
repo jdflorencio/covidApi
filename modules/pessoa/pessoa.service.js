@@ -121,11 +121,15 @@ class PessoaService {
 		const { params, body } = payload
 		const cidade = {
 			id: params.id,
-			nova: body.cidade
+			nova: body.cidade_nova,
+			uf_anterior: body.uf_anterior,
+			situacao: body.situacao
 		}
+
+
 		try {
 			const pessoa = await pessoaModel.update({ cidade_id: cidade.nova }, { where: { id: cidade.id } }, { transaction })
-
+			casos.alterarCidade(cidade)
 			transaction.commit()
 			return pessoa
 
@@ -150,6 +154,7 @@ class PessoaService {
 
 
 		const transaction = await connection.transaction({ isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED })
+
 
 		let validPayload = helper.isValidSituacao(prontuario_body)
 

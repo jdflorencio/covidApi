@@ -68,6 +68,10 @@ class QuadroService {
 			where: { uf }
 		})
 	}
+
+	async quadroAll() {
+		return await quadroModel.findAll()
+	}
 	
 }
 
