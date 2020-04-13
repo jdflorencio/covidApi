@@ -56,8 +56,8 @@ class QuadroService {
 
 		} catch (error) {
 
-			
-			
+
+
 			transaction.rollback()
 			throw error
 		}
@@ -72,7 +72,11 @@ class QuadroService {
 	async quadroAll() {
 		return await quadroModel.findAll()
 	}
-	
+
+	async delete(uf) {
+		return await quadroModel.destroy({ where: { uf } })
+	}
+
 }
 
 

@@ -98,6 +98,12 @@ class Casos {
         })
 
         const quadro = await QuadroService.consultar(pessoa.cidade.uf)
+        const total = (quadro.caso_suspeito + quadro.caso_analise + quadro.caso_confirmado + quadro.caso_descartado) - 1
+        if (total <=0 ) {
+            QuadroService.delete(pessoa.cidade.uf)
+            return true
+        }
+        
         const atualizar = {}
 
         atualizar.uf = pessoa.cidade.uf
