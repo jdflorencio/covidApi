@@ -121,6 +121,9 @@ class Casos {
         const quadro_uf_anterior = await QuadroService.consultar(ufAnterior)
         const quadro_uf_atual = await QuadroService.consultar(ufAtual)
 
+        const linha_anterior = {}
+        const linha_nova = {}
+
         const pessoa = await pessoaModel.findAll({
             where: {
                 cidade_id: cidade_id
@@ -138,20 +141,42 @@ class Casos {
             atualizar[this.table[status.dataValues.situacao]] = status.dataValues.total
         })
 
-        quadro_uf_anterior.dataValues.caso_suspeito = Number.isInteger(quadro_uf_anterior.dataValues.caso_suspeito) ?
-            quadro_uf_anterior.dataValues.caso_suspeito - atualizar.caso_suspeito : 0
+        if (quadro_uf_anterior) {
+            
+            linha_anterior.uf = quadro_uf_anterior.uf
+            linha_anterior.caso_suspeito = quadro_uf_anterior.caso_suspeito || 0
+            linha_anterior.caso_analise = quadro_uf_anterior.caso_analise || 0
+            linha_anterior.caso_confirmado = quadro_uf_anterior.caso_confirmado || 0
+            linha_anterior.caso_descartado = quadro_uf_anterior.caso_descartado || 0
 
-        quadro_uf_anterior.dataValues.caso_analise = Number.isInteger(quadro_uf_anterior.dataValues.caso_analise) ?
-            quadro_uf_anterior.dataValues.caso_analise - atualizar.caso_analise : 0
+            linha_anterior.caso_suspeito = typeof atualizar.caso_suspeito == 'number' && linha_anterior.caso_suspeito > 0 ?
+                linha_anterior.caso_suspeito - atualizar.caso_suspeito : linha_anterior.caso_suspeito
 
-        quadro_uf_anterior.dataValues.caso_confirmado = Number.isInteger(quadro_uf_anterior.dataValues.caso_confirmado) ?
-            quadro_uf_anterior.dataValues.caso_confirmado - atualizar.caso_confirmado : 0
+            linha_anterior.caso_analise = typeof atualizar.caso_analise == 'number' && linha_anterior.caso_analise > 0 ?
+                linha_anterior.caso_analise - atualizar.caso_analise : linha_anterior.caso_analise
 
-        quadro_uf_anterior.dataValues.caso_descartado = Number.isInteger(quadro_uf_anterior.dataValues.caso_descartado) ?
-            quadro_uf_anterior.dataValues.caso_descartado - atualizar.caso_descartado : 0
+            linha_anterior.caso_confirmado = typeof atualizar.caso_confirmado == 'number' && linha_anterior.caso_confirmado > 0 ?
+                linha_anterior.caso_confirmado - atualizar.caso_confirmado : linha_anterior.caso_confirmado
+
+            linha_anterior.caso_descartado = typeof atualizar.caso_descartado == 'number' && linha_anterior.caso_descartado > 0 ?
+                linha_anterior.caso_descartado - atualizar.caso_descartado : linha_anterior.caso_descartado
+
+            const totalAnterior = (
+                linha_anterior.caso_analise
+                + linha_anterior.caso_suspeito
+                + linha_anterior.caso_confirmado
+                + linha_anterior.caso_descartado)
+                - 1
+
+            if (totalAnterior >= 0) {
+                QuadroService.update(linha_anterior)
+            } else {
+                QuadroService.delete(linha_anterior.uf)
 
 
-        await QuadroService.update(quadro_uf_anterior.dataValues)
+            }
+        }
+
 
         if (!quadro_uf_atual) {
             atualizar.uf = ufAtual
@@ -159,21 +184,28 @@ class Casos {
             await QuadroService.insert(atualizar)
             return true
         }
-
-        quadro_uf_atual.dataValues.caso_suspeito = Number.isInteger(quadro_uf_atual.dataValues.caso_suspeito) ?
-            quadro_uf_atual.dataValues.caso_suspeito + atualizar.caso_suspeito : 0
-
-        quadro_uf_atual.dataValues.caso_analise = Number.isInteger(quadro_uf_atual.dataValues.caso_analise) ?
-            quadro_uf_atual.dataValues.caso_analise + atualizar.caso_analise : 0
-
-        quadro_uf_atual.dataValues.caso_confirmado = Number.isInteger(quadro_uf_atual.dataValues.caso_confirmado) ?
-            quadro_uf_atual.dataValues.caso_confirmado + atualizar.caso_confirmado : 0
-
-        quadro_uf_atual.dataValues.caso_descartado = Number.isInteger(quadro_uf_atual.dataValues.caso_descartado) ?
-            quadro_uf_atual.dataValues.caso_descartado + atualizar.caso_descartado : 0
+        
+        linha_nova.uf = quadro_uf_atual.uf
+        linha_nova.caso_suspeito = quadro_uf_atual.caso_suspeito || 0
+        linha_nova.caso_analise = quadro_uf_atual.caso_analise || 0
+        linha_nova.caso_confirmado = quadro_uf_atual.caso_confirmado || 0
+        linha_nova.caso_descartado = quadro_uf_atual.caso_descartado || 0
 
 
-        await QuadroService.update(quadro_uf_atual.dataValues)
+        linha_nova.caso_suspeito = typeof atualizar.caso_suspeito == "number" && atualizar.caso_suspeito > 0 ?
+            linha_nova.caso_suspeito + atualizar.caso_suspeito : linha_nova.caso_suspeito
+
+        linha_nova.caso_analise = typeof atualizar.caso_analise == "number" && atualizar.caso_analise > 0 ?
+            linha_nova.caso_analise + atualizar.caso_analise : linha_nova.caso_analise
+
+        linha_nova.caso_confirmado = typeof atualizar.caso_confirmado == "number" && atualizar.caso_confirmado > 0 ?
+            linha_nova.caso_confirmado + atualizar.caso_confirmado : linha_nova.caso_confirmado
+
+        linha_nova.caso_descartado = typeof atualizar.caso_descartado == "number" && atualizar.caso_descartado > 0 ?
+            linha_nova.caso_descartado + atualizar.caso_descartado : linha_nova.caso_descartado
+
+
+        await QuadroService.update(linha_nova)
         return true
     }
 }
