@@ -85,7 +85,7 @@ class CidadeService {
 		try {
 			await cidadeModel.update(validPayload.value, { where: { id: cidade.id } }, { transaction })
 			
-			Promise.resolve(casos.cidade(cidade.id, cidade.uf, validPayload.value.uf)).then(() => {
+			Promise.resolve(casos.alterar_uf(cidade.id, cidade.uf, validPayload.value.uf)).then(() => {
 				transaction.commit()
 			})
 			.catch( error => {

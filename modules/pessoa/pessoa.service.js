@@ -129,7 +129,7 @@ class PessoaService {
 
 		try {
 			const pessoa = await pessoaModel.update({ cidade_id: cidade.nova }, { where: { id: cidade.id } }, { transaction })
-			casos.alterarCidade(cidade)
+			casos.atualizar_cidade_pessoa(cidade)
 			transaction.commit()
 			return pessoa
 
@@ -168,7 +168,7 @@ class PessoaService {
 		try {
 			const prontuario = await prontuarioModel.create(validPayload.value, { transaction })
 			pessoaModel.update(situacao, { where: { id: prontuario_body.pessoa_id } }, { transaction })
-			casos.atualizar(body)
+			casos.atualizar_prontuario(body)
 
 			transaction.commit()
 

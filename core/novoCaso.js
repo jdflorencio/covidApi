@@ -31,13 +31,17 @@ class Casos {
         return await QuadroService.insert(state)
     }
 
-    async atualizar(payload) {
+    async atualizar_prontuario(payload) {
 
         const { situacao, anterior, uf } = payload
 
         const quadro = await QuadroService.consultar(uf)
 
         const atualizar = {}
+
+        if (situacao == anterior) {
+            return true
+        }
 
         atualizar.uf = uf
         atualizar[this.table[situacao]] = quadro[this.table[situacao]] + 1
@@ -48,7 +52,7 @@ class Casos {
         return true
     }
 
-    async alterarCidade(payload) {
+    async atualizar_cidade_pessoa(payload) {
 
         const cidade_nova = await cidadeModel.findByPk(payload.nova)
 
@@ -116,7 +120,7 @@ class Casos {
         return true
     }
 
-    async cidade(cidade_id, ufAnterior, ufAtual) {
+    async alterar_uf(cidade_id, ufAnterior, ufAtual) {
 
         const quadro_uf_anterior = await QuadroService.consultar(ufAnterior)
         const quadro_uf_atual = await QuadroService.consultar(ufAtual)
