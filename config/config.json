@@ -4,7 +4,7 @@
     "password": "123",
     "database": "mapCovid",
     "host": "172.24.02",
-    "dialect": "mysql",
+    "dialect": "postgres",
     "timezone": "-03:00"
   }
 
