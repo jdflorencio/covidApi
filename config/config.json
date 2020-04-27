@@ -1,10 +1,10 @@
 {
   "development": {
-    "username": "root",
-    "password": "123",
-    "database": "mapCovid",
-    "host": "172.24.02",
-    "dialect": "mysql",
+    "username": "postgres",
+    "password": "",
+    "database": "mapcovid",
+    "host": "localhost",
+    "dialect": "postgres",
     "timezone": "-03:00"
   }
 
